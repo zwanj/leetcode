@@ -1,0 +1,39 @@
+class Solution {
+    
+    List<List<Integer>> result = new ArrayList<>();
+    List<Integer> path = new ArrayList<>();
+    
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        //排序
+        Arrays.sort(candidates);
+        backtrack(candidates,target,0,0);
+        return result;
+    }
+
+    public void backtrack(int[] candidates, int target, int sum, int startIndex){
+        //end req
+        if(sum > target) return;
+        if(sum == target){
+            //记得new Arraylist
+            result.add(new ArrayList<>(path));
+            return;
+        }
+
+        //find
+        //如果剪枝，则下一层的第一个点对应的sum应该小于target
+        //i<candidates.length && sum + candidate[i] <= target
+        
+        for(int i=startIndex; i<candidates.length;i++){
+            //同层去重，当开始第二个分支时，如果该值等于上一个，则直接跳过
+            if(i>startIndex && candidates[i] == candidates[i-1]) continue;
+
+            path.add(candidates[i]);
+            sum += candidates[i];
+            
+            backtrack(candidates,target,sum, i+1);
+            sum-= candidates[i];
+            path.removeLast();
+
+        }
+    }
+}
